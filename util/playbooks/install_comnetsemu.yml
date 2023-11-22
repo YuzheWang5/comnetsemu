@@ -49,7 +49,7 @@
       dest: "{{ TOP_DIR }}/comnetsemu_dependencies/mininet"
       # Unreleased version 2.3.1b1
       # This version is needed because it replace all git URLs to https!
-      version: 6eb8973c0bfd13c25c244a3871130c5e36b5fbd7
+      version: aa0176fce6fb718a03474f8719261b07b670d30d
       force: yes
 
   # Patch source code directly, instead of using runtime monkey patching
