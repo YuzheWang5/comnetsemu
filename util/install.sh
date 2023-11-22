@@ -60,8 +60,10 @@ if [[ "$ARCH" == "i686" ]]; then
     exit 1
 fi
 
-# ComNetsEmu is only fully tested under the LTS version below
-UBUNTU_RELEASE="20.04"
+# ComNetsEmu is fully tested under the LTS version
+UBUNTU_RELEASE_1="20.04"
+# Additional supported version with warning
+UBUNTU_RELEASE_2="22.04"
 # Truly non-interactive apt-get installation
 INSTALL="sudo DEBIAN_FRONTEND=noninteractive apt-get -y -q install"
 UPDATE="sudo apt-get update --fix-missing"
@@ -72,16 +74,17 @@ if [ "$DIST" = "Ubuntu" ]; then
     if ! lsb_release -v &>/dev/null; then
         $INSTALL lsb-release
     fi
-    if [[ $(lsb_release -rs) != "$UBUNTU_RELEASE" ]]; then
-        error "[DIST]" "This installer ONLY supports Ubuntu $UBUNTU_RELEASE LTS."
-
-        echo "If you have created a VM with an older LTS version (e.g. 18.04), please recreate the virtual machine to upgrade the base operating system and packages."
-        echo "If using vagrant. you can simply destroy the VM and restart the ComNetsEmu VM after pulling the latest tag/release."
-        echo "You can rebuild all container images after you create a new VM."
+    CURRENT_VERSION=$(lsb_release -rs)
+    if [[ $CURRENT_VERSION != "$UBUNTU_RELEASE_1" && $CURRENT_VERSION != "$UBUNTU_RELEASE_2" ]]; then
+        error "[DIST]" "This installer ONLY supports Ubuntu $UBUNTU_RELEASE_1 LTS and Ubuntu $UBUNTU_RELEASE_2 LTS."
         exit 1
     fi
+
+    if [[ $CURRENT_VERSION = "$UBUNTU_RELEASE_2" ]]; then
+        echo "Warning: You are using Ubuntu $UBUNTU_RELEASE_2 LTS, which has not been fully tested with this installer."
+    fi
 else
-    error "[DIST]" "This installer ONLY supports Ubuntu $UBUNTU_RELEASE LTS."
+    error "[DIST]" "This installer ONLY supports Ubuntu $UBUNTU_RELEASE_1 LTS and Ubuntu $UBUNTU_RELEASE_2 LTS."
     exit 1
 fi
 
@@ -94,18 +97,25 @@ NEEDED_CMDS=(
     sed
     sudo
 )
-MISSING_CMDS=()
+
+# Function to install a command
+install_cmd() {
+    echo "Attempting to install $1..."
+    sudo apt-get install -qq $1 >/dev/null 2>&1
+}
 
 for cmd in "${NEEDED_CMDS[@]}"; do
     if ! command -v "$cmd" >/dev/null; then
-        MISSING_CMDS+=("$cmd")
+        echo "$cmd is not installed. Trying to install..."
+        install_cmd "$cmd"
+        if ! command -v "$cmd" >/dev/null; then
+            echo "Failed to install $cmd. Please install it manually."
+            exit 1
+        fi
     fi
 done
 
-if [[ ${#MISSING_CMDS[@]} -gt 0 ]]; then
-    error "[CMDS]" "Missing commands (${MISSING_CMDS[*]}) to run this script. Please install them with your package manager."
-    exit 1
-fi
+echo "All necessary commands are installed."
 
 ####################
 #  Main Installer  #
