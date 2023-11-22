@@ -1,0 +1,14 @@
+246c246,247
+<         docker_args["cgroup_parent"] = "/docker/{}".format(dhost.dins.id)
+---
+>         # docker_args["cgroup_parent"] = "/docker/{}".format(dhost.dins.id)
+>         docker_args["cgroup_parent"] = "system.slice"
+387c388
+<         cpu_count = len(stats["cpu_stats"]["cpu_usage"]["percpu_usage"])
+---
+>         cpu_count = float(stats["cpu_stats"]["online_cpus"])
+396,397c397
+<             cpu_percent = cpu_delta / system_delta * 100.0 * cpu_count
+< 
+---
+>             cpu_percent = cpu_delta / system_delta * 1.0 * cpu_count

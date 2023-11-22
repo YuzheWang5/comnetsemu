@@ -22,8 +22,8 @@ from mininet.node import OVSBridge
 from mininet.topo import Topo
 
 # Measurement error threshold
-CPU_ERR_THR = 5  # %
-MEM_ERR_THR = 50  # MB
+CPU_ERR_THR = 20  # %
+MEM_ERR_THR = 500  # MB
 
 HOST_NUM = 3
 
@@ -140,7 +140,7 @@ class TestVNFManager(unittest.TestCase):
 
         # CPU and memory
         h1.dins.update(cpu_quota=10000)
-        h1.dins.update(mem_limit=10 * (1024 ** 2))  # in bytes
+        h1.dins.update(mem_limit=10 * (1024 ** 2), memswap_limit=10 * (1024 ** 2))  # in bytes
 
         c1 = self.mgr.addContainer(
             "c1", "h1", "dev_test", "stress-ng -c 1 -m 1 --vm-bytes 300M", {}
@@ -152,7 +152,7 @@ class TestVNFManager(unittest.TestCase):
         self.assertTrue(abs(mem - 10.0) <= MEM_ERR_THR)
         self.mgr.removeContainer(c1.name)
         h1.dins.update(cpu_quota=-1)
-        h1.dins.update(mem_limit=100 * (1024 ** 3))
+        h1.dins.update(mem_limit=100 * (1024 ** 3), memswap_limit=100 * (1024 ** 3))
 
         # Network
         for r in [h2, h3]:

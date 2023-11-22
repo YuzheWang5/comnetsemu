@@ -243,7 +243,7 @@ class APPContainerManager:
         docker_args.update(self.docker_args_default)
         docker_args["name"] = name
         docker_args["image"] = dimage
-        docker_args["cgroup_parent"] = "/docker/{}".format(dhost.dins.id)
+        docker_args["cgroup_parent"] = "system.slice"
         docker_args["command"] = dcmd
         docker_args["network_mode"] = "container:{}".format(dhost.dins.id)
 
@@ -384,7 +384,7 @@ class APPContainerManager:
     @staticmethod
     def _calculate_cpu_percent(stats):
         """Calculate the CPU usage in percent with given stats JSON data"""
-        cpu_count = len(stats["cpu_stats"]["cpu_usage"]["percpu_usage"])
+        cpu_count = float(stats["cpu_stats"]["online_cpus"])
         cpu_percent = 0.0
         cpu_delta = float(stats["cpu_stats"]["cpu_usage"]["total_usage"]) - float(
             stats["precpu_stats"]["cpu_usage"]["total_usage"]
@@ -393,7 +393,7 @@ class APPContainerManager:
             stats["precpu_stats"]["system_cpu_usage"]
         )
         if system_delta > 0.0:
-            cpu_percent = cpu_delta / system_delta * 100.0 * cpu_count
+            cpu_percent = cpu_delta / system_delta * 1.0 * cpu_count
 
         if cpu_percent > 100:  # pragma: no cover
             cpu_percent = 100
