@@ -7,6 +7,8 @@
 # and keep the CLI interface of the old ComNetsEmu versions (before 0.3.0)
 #
 
+set -x
+
 # Fail on error
 set -e
 
@@ -168,3 +170,5 @@ else
     done
     shift "$((OPTIND - 1))"
 fi
+
+set +x
