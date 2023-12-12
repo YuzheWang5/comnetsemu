@@ -34,7 +34,7 @@ serverAddressPort = ("10.0.0.30", 9999)
 clientAddressPort = ("10.0.0.10", 9999)
 
 # Generate a random number
-random_number = random.randint(0, 100) # 0 ~ 100
+random_number = random.randint(0, 10)
 print(f"Generated random number: {random_number}")
 
 # Convert random number to bytes and send it to the server

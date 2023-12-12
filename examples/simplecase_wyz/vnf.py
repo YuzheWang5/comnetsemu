@@ -44,9 +44,9 @@ def main(simplecoin: SimpleCOIN.IPC, af_packet: bytes):
 
             # prepare the new packet and send it to the server
             squared_number_bytes = str(squared_number).encode()  # turn the squared number into bytes
-            new_packet_chunk = chunk_handler.get_chunks_fc(squared_number_bytes)
-            new_packet = b''.join(new_packet_chunk)
+            af_packet_chunk = chunk_handler.get_chunks_fc(squared_number_bytes)
+            af_packet = b''.join(af_packet_chunk) # join the chunks
             print("forwarding")
-            simplecoin.forward(new_packet)
+            simplecoin.forward(af_packet)
 
 app.run()
