@@ -35,14 +35,12 @@ app = SimpleCOIN(ifce_name=ifce_name, n_func_process=1, lightweight_mode=True)
 def main(simplecoin: SimpleCOIN.IPC, af_packet: bytes):
     global pro_num
     packet = simple.parse_af_packet(af_packet)
-
     # check if the packet is UDP and not from the server
     if packet['Protocol'] == pro_num and packet['IP_src'] != node_ip:
-        try:
-            random_number = int(packet['Data'].decode())
+            random_number = int(packet['Chunk'].decode())
             squared_number = random_number ** 2
             print(f"Received number: {random_number}, Squared: {squared_number}")
-        except (ValueError, KeyError):
-            print("Error: Received data is not a valid integer or missing key.")
+            print("forwarding")
+            simplecoin.forward(af_packet)
 
 app.run()

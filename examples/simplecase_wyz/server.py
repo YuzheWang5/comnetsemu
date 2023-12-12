@@ -37,6 +37,8 @@ app = SimpleCOIN(ifce_name=ifce_name, n_func_process=1, lightweight_mode=True)
 
 first = True
 
+
+
 @app.main() # main function
 def main(simplecoin: SimpleCOIN.IPC, af_packet: bytes):
     global pro_num, first
@@ -44,17 +46,14 @@ def main(simplecoin: SimpleCOIN.IPC, af_packet: bytes):
         conn, addr = simple.accept(serverAddressPort)
         first = False
 
-    if pro_num == 17:  # UDP
+    if pro_num == 17:
         packet = simple.parse_af_packet(af_packet)
         if packet['Protocol'] == pro_num and packet['IP_src'] != node_ip: # if the packet is UDP and not from the server
-            data = packet['Data']
-            try:
-                random_number = int(data.decode())
-                print(f"The final result: {random_number}")
-            except ValueError:
-                print("Received data is not a valid integer.")
+            chunk = packet['Chunk']
+            random_number = int(chunk.decode())
+            print(f"The final result: {random_number}")
 
-    elif pro_num == 6:  # TCP
+    elif pro_num == 6:
         data = simple.recv(conn)
         print(data)
 
