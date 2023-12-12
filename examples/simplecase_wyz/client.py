@@ -40,11 +40,11 @@ print(f"Generated random number: {random_number}")
 # Convert random number to bytes and send it to the server
 random_number_bytes = str(random_number).encode() # Convert to bytes and encode it to string
 
-#chunk_arr = chunk_handler.get_chunks_fc(random_number_bytes)
-#print(f"chunk_arr: {len(chunk_arr)}") # 64
-#for chunk in chunk_arr:
-        # time.sleep(0.001)
-simple.sendto(random_number_bytes, serverAddressPort) # Send to server
+chunk_arr = chunk_handler.get_chunks_fc(random_number_bytes)
+print(f"chunk_arr: {len(chunk_arr)}") # 64
+for chunk in chunk_arr:
+        time.sleep(0.001)
+        simple.sendto(random_number_bytes, serverAddressPort) # Send to server
 
 if protocol == "tcp":
     simple.close()
