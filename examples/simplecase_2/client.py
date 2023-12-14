@@ -33,18 +33,15 @@ app = SimpleCOIN(ifce_name=ifce_name, n_func_process=5, lightweight_mode=True)
 serverAddressPort = ("10.0.0.30", 9999)
 clientAddressPort = ("10.0.0.10", 9999)
 
-# Generate a random number
 random_number = random.randint(1, 10)
 print(f"Generated random number: {random_number}")
 
-# Convert random number to bytes and send it to the server
 random_number_bytes = str(random_number).encode() # Convert to bytes and encode it to string
 
-chunk_arr = chunk_handler.get_chunks_fc(random_number_bytes)
-print(f"chunk_arr: {len(chunk_arr)}") # 64
+chunk_arr:list = chunk_handler.get_chunks_fc(random_number_bytes)
+# print(f"chunk_arr: {len(chunk_arr)}")
 for chunk in chunk_arr:
         time.sleep(0.001)
-        simple.sendto(random_number_bytes, serverAddressPort) # Send to server
-
+        simple.sendto(random_number_bytes, serverAddressPort)
 if protocol == "tcp":
     simple.close()
