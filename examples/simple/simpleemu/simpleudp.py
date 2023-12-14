@@ -51,6 +51,11 @@ class SimpleUDP():
         packet['Port_dst'] = (data[22] << 8) + data[23]
         packet['Chunk'] = data[28:]
         return packet
+    
+    # recreate the udp raw packet
+    def recreate_af_packet_by_chunk(self,packet:dict) -> bytes:
+        af_packet:bytes = packet['Raw'][:42] + packet['Chunk'] # add with total udp header length
+        return bytes(af_packet)
 
     # get ifce name and node ip automatically
     def get_local_ifce_ip(self, ip_prefix: str):
