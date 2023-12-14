@@ -40,8 +40,8 @@ random_number_bytes = str(random_number).encode() # Convert to bytes and encode 
 
 chunk_arr:list = chunk_handler.get_chunks_fc(random_number_bytes)
 # print(f"chunk_arr: {len(chunk_arr)}")
-for chunk in chunk_arr:
-        time.sleep(0.001)
-        simple.sendto(random_number_bytes, serverAddressPort)
+# for chunk in chunk_arr:
+#         time.sleep(0.001)
+simple.sendto(random_number_bytes, serverAddressPort)
 if protocol == "tcp":
     simple.close()
