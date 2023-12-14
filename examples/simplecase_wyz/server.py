@@ -50,8 +50,8 @@ def main(simplecoin: SimpleCOIN.IPC, af_packet: bytes):
         packet = simple.parse_af_packet(af_packet)
         if packet['Protocol'] == pro_num and packet['IP_src'] != node_ip: # if the packet is UDP and not from the server
             chunk = packet['Chunk']
-            random_number = int(chunk.decode())
-            print(f"The final result: {random_number}")
+            squared_number = int(chunk.decode())
+            print(f"The final result: {squared_number}")
 
     elif pro_num == 6:
         data = simple.recv(conn)

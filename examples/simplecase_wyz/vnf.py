@@ -31,6 +31,18 @@ ifce_name, node_ip = simple.get_local_ifce_ip('10.0')
 # Simple coin
 app = SimpleCOIN(ifce_name=ifce_name, n_func_process=1, lightweight_mode=True)
 
+# @app.main()
+# def main(simplecoin: SimpleCOIN.IPC, af_packet: bytes):
+#     global pro_num
+#     packet = simple.parse_af_packet(af_packet)
+#     if packet['Protocol'] == pro_num and packet['IP_src'] != node_ip:
+#         random_number = int(packet['Chunk'].decode())
+#         squared_number = random_number ** 2
+#         print(f"Received number: {random_number}, Squared: {squared_number}")
+#         print("forwarding")
+#         simplecoin.forward(af_packet)
+
+
 @app.main()
 def main(simplecoin: SimpleCOIN.IPC, af_packet: bytes):
     global pro_num
@@ -39,25 +51,10 @@ def main(simplecoin: SimpleCOIN.IPC, af_packet: bytes):
         random_number = int(packet['Chunk'].decode())
         squared_number = random_number ** 2
         print(f"Received number: {random_number}, Squared: {squared_number}")
-        print("forwarding")
-        simplecoin.forward(af_packet)
-
-
-@app.main()
-def main(simplecoin: SimpleCOIN.IPC, af_packet: bytes):
-    global pro_num
-    packet = simple.parse_af_packet(af_packet)
-    if packet['Protocol'] == pro_num and packet['IP_src'] != node_ip:
-        # 解析原始数据包并计算平方
-        random_number = int(packet['Chunk'].decode())
-        squared_number = random_number ** 2
-        print(f"Received number: {random_number}, Squared: {squared_number}")
-
-        squared_number_bytes = str(squared_number).encode()
-        af_packet = chunk_handler.get_chunks_fc(squared_number_bytes)
-        # 这里需要根据您的框架和数据包格式来构造新的数据包
-        # 创建新的数据包，替换packet['Chunk']的内容为squared_number_bytes
-
+        # squared_number_bytes = str(squared_number).encode()
+        # af_packet = chunk_handler.get_chunks_fc(squared_number_bytes)
+        # af_packet = simple.get_chunks_fc(squared_number_bytes)
+        # af_packet = b''.join(af_packet_chunk) # join the chunks
         print("forwarding")
         simplecoin.forward(af_packet)
 
