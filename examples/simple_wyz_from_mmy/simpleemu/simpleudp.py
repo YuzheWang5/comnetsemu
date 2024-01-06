@@ -12,7 +12,7 @@ from typing import Tuple
 class SimpleUDP():
     def __init__(self,BUFFER_SIZE:int=4096) -> None:
         self.BUFFER_SIZE = BUFFER_SIZE
-        self.client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # Use IPv4 and UDP
+        self.client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.recv_sockets = {}
         pass
 
